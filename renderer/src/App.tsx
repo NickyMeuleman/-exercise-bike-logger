@@ -12,6 +12,7 @@ import {
   TRPCResponseMessage,
   TRPCResultMessage,
 } from "@trpc/server/rpc";
+import { Outlet } from "react-router-dom";
 
 // from @trpc/client/src/links/internals/transformResult
 // FIXME:
@@ -86,7 +87,7 @@ function App() {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <Home />
+        <Outlet />
       </QueryClientProvider>
     </trpc.Provider>
   );
