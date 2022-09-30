@@ -1,7 +1,7 @@
 import "./App.css";
 import { trpc } from "./utils/trpc";
 import reactLogo from "./assets/react.svg";
-
+import { Link } from "react-router-dom";
 function Home() {
   const examples = trpc.example.getAll.useQuery();
   const utils = trpc.useContext();
@@ -19,7 +19,8 @@ function Home() {
 
   return (
     <div className="App">
-      <div>
+      <Link to={"add"}>TO ADD</Link>
+      <div className="bg-red-400">
         <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
           <img src="vite.svg" className="logo" alt="Vite logo" />
         </a>
@@ -27,7 +28,7 @@ function Home() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <p>{greeting.data}</p>
+      <p className="p-4 pt-2 text-green-600">{greeting.data}</p>
       <button onClick={() => addExample.mutate()}>ADD example</button>
       <ul>
         {examples.data?.map((example, idx) => {

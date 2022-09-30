@@ -30,6 +30,7 @@ const eslintConfig = {
     sourceType: "module",
     project: ["./tsconfig.json", "../tsconfig.node.json"],
   },
+  ignorePatterns: ["*.cjs"],
   plugins: ["react", "react-hooks", "@typescript-eslint"],
   rules: {},
   overrides: [],
