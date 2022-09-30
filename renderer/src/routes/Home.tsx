@@ -1,6 +1,5 @@
-import "./App.css";
-import { trpc } from "./utils/trpc";
-import reactLogo from "./assets/react.svg";
+import { trpc } from "../utils/trpc";
+import reactLogo from "../assets/react.svg";
 import { Link } from "react-router-dom";
 function Home() {
   const examples = trpc.example.getAll.useQuery();

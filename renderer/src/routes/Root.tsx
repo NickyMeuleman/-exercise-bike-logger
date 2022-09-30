@@ -1,7 +1,5 @@
 import { useState } from "react";
-import "./App.css";
-import { trpc } from "./utils/trpc";
-import Home from "./Home";
+import { trpc } from "../utils/trpc";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TRPCClientError, TRPCClientRuntime } from "@trpc/client";
 import type { TRPCLink } from "@trpc/client";
