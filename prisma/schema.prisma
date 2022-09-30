@@ -13,3 +13,12 @@ datasource db {
 model Example {
   id String @id @default(uuid())
 }
+
+model Rit {
+  id         String   @id @default(cuid())
+  date       DateTime
+  duration   Int
+  distance   Int
+  calories   Int
+  resistance Int
+}
