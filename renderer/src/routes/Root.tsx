@@ -10,7 +10,10 @@ import {
   TRPCResponseMessage,
   TRPCResultMessage,
 } from "@trpc/server/rpc";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
+import { Header } from "../components/Header";
+import { Footer } from "../components/Footer";
+import { OverlayContainer } from "react-aria";
 
 // from @trpc/client/src/links/internals/transformResult
 // FIXME:
@@ -75,6 +78,8 @@ export function ipcLink<TRouter extends AnyRouter>(): TRPCLink<TRouter> {
 }
 
 function App() {
+  const { pathname } = useLocation();
+
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() => {
     return trpc.createClient({
@@ -83,11 +88,21 @@ function App() {
   });
 
   return (
-    <trpc.Provider client={trpcClient} queryClient={queryClient}>
-      <QueryClientProvider client={queryClient}>
-        <Outlet />
-      </QueryClientProvider>
-    </trpc.Provider>
+    <OverlayContainer>
+      <trpc.Provider client={trpcClient} queryClient={queryClient}>
+        <QueryClientProvider client={queryClient}>
+          <div className="flex min-h-screen flex-col">
+            <div className="flex-1">
+              {pathname !== "/" ? <Header /> : null}
+              <main>
+                <Outlet />
+              </main>
+            </div>
+            <Footer />
+          </div>
+        </QueryClientProvider>
+      </trpc.Provider>
+    </OverlayContainer>
   );
 }
 
