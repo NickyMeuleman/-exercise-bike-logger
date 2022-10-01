@@ -23,8 +23,8 @@ const rootEl = document.getElementById("root");
 
 if (rootEl) {
   ReactDOM.createRoot(rootEl).render(
-    <React.StrictMode>
-      <RouterProvider router={router} />
-    </React.StrictMode>
+    // <React.StrictMode>
+    <RouterProvider router={router} />
+    // </React.StrictMode>
   );
 }
