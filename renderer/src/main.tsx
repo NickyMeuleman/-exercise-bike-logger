@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./routes/ErrorPage";
 import Home from "./routes/Home";
 import Add from "./routes/Add";
+import EditPage from "./routes/Edit";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <Home /> },
       { path: "add", element: <Add /> },
+      { path: "edit/:id", element: <EditPage /> },
     ],
   },
 ]);

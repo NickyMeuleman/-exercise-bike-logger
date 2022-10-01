@@ -95,7 +95,7 @@ const Table: React.FC<{
               <td
                 className={`whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900 sm:pl-6 ${roundl}`}
               >
-                <Link to={`/edit/${rit.id}`}>
+                <Link to={`edit/${rit.id}`}>
                   {new Intl.DateTimeFormat("nl-BE", {
                     dateStyle: "medium",
                   }).format(rit.date)}
