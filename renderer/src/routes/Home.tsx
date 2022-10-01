@@ -112,9 +112,7 @@ const Home = () => {
 
   return (
     <>
-      HOME
-      {JSON.stringify(ritten.data, null, 2)}
-      {/* <div
+      <div
         className="bg-slate-800 from-slate-800 to-slate-700 pb-12"
         style={{
           backgroundSize: "200%",
@@ -141,7 +139,7 @@ const Home = () => {
             sortKey={sortKey}
           />
         </div>
-      </div> */}
+      </div>
     </>
   );
 };
