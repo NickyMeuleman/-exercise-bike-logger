@@ -37,9 +37,7 @@ const ALLOWED_ORIGINS_AND_PERMISSIONS = new Map<string, Set<Permissions>>(
  * >
  */
 const ALLOWED_EXTERNAL_ORIGINS = new Set<`https://${string}`>([
-  "https://github.com",
-  "https://vitejs.dev",
-  "https://reactjs.org",
+  "https://twitter.com",
 ]);
 
 app.on("web-contents-created", (_, contents) => {

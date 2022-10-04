@@ -19,7 +19,7 @@ type SortOrder = "ascn" | "desc";
 
 export interface DateFilter {
   kind: "date";
-  val: { start: CalendarDate; end: CalendarDate };
+  val: { start?: CalendarDate; end?: CalendarDate };
 }
 export interface GenericFilter {
   kind: keyof Omit<Data[0], "id" | "date">;
@@ -80,6 +80,8 @@ const Home = () => {
     },
   });
 
+  if (!ritten.data) return <div>no data</div>;
+
   function changeSort(key: SortKeys) {
     if (key == sortKey) {
       setSortOrder(sortOrder === "ascn" ? "desc" : "ascn");
@@ -95,7 +97,7 @@ const Home = () => {
     { key: "resistance", label: "Weerstand" },
   ];
 
-  const totals = ritten.data?.reduce(
+  const totals = ritten.data.reduce(
     (acc, rit) => {
       return {
         distance: acc.distance + rit.distance,
@@ -112,9 +114,7 @@ const Home = () => {
 
   return (
     <>
-      HOME
-      {JSON.stringify(ritten.data, null, 2)}
-      {/* <div
+      <div
         className="bg-slate-800 from-slate-800 to-slate-700 pb-12"
         style={{
           backgroundSize: "200%",
@@ -141,7 +141,7 @@ const Home = () => {
             sortKey={sortKey}
           />
         </div>
-      </div> */}
+      </div>
     </>
   );
 };
