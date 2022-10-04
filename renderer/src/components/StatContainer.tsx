@@ -1,10 +1,10 @@
 // import { PredictiveAnalyticsSVG } from "./PredictiveAnalyticsSVG";
-import React from 'react'
+import React from "react";
 
 const StatContainer: React.FC<{
   title: string;
   Icon: React.FC;
-  children: any;
+  children: React.ReactNode;
 }> = ({ title, children, Icon }) => {
   return (
     <div className="border-1 flex flex-wrap justify-between gap-4 rounded-md border-gray-300 bg-gray-50 p-4 shadow-md">

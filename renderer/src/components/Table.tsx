@@ -52,7 +52,7 @@ const Table: React.FC<{
   data?: Data;
   sortOrder: SortOrder;
   sortKey: SortKeys;
-  changeSort: any;
+  changeSort: (key: SortKeys) => void;
 }> = ({ headers, data, sortOrder, changeSort, sortKey }) => {
   return (
     <table className="divide-y divide-gray-300 rounded-md bg-slate-200 shadow-md">

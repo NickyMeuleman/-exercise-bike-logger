@@ -8,25 +8,21 @@ import { CalendarGrid } from "./CalendarGrid";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/outline";
 
 export function RangeCalendar(props: any) {
-  let { locale } = useLocale();
-  let state = useRangeCalendarState({
+  const { locale } = useLocale();
+  const state = useRangeCalendarState({
     ...props,
     locale,
-    createCalendar
+    createCalendar,
   });
 
-  let ref: any = useRef();
-  let {
-    calendarProps,
-    prevButtonProps,
-    nextButtonProps,
-    title
-  } = useRangeCalendar(props, state, ref);
+  const ref: any = useRef();
+  const { calendarProps, prevButtonProps, nextButtonProps, title } =
+    useRangeCalendar(props, state, ref);
 
   return (
     <div {...calendarProps} ref={ref} className="inline-block">
       <div className="flex items-center pb-4">
-        <h2 className="flex-1 font-bold text-xl ml-2">{title}</h2>
+        <h2 className="ml-2 flex-1 text-xl font-bold">{title}</h2>
         <CalendarButton {...prevButtonProps}>
           <ChevronLeftIcon className="h-6 w-6" />
         </CalendarButton>

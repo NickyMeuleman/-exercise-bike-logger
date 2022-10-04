@@ -5,15 +5,15 @@ import { useDateField, useDateSegment } from "react-aria";
 import { createCalendar } from "@internationalized/date";
 
 export function DateField(props: any) {
-  let { locale } = useLocale();
-  let state = useDateFieldState({
+  const { locale } = useLocale();
+  const state = useDateFieldState({
     ...props,
     locale,
     createCalendar,
   });
 
-  let ref: any = useRef();
-  let { fieldProps } = useDateField(props, state, ref);
+  const ref: any = useRef();
+  const { fieldProps } = useDateField(props, state, ref);
 
   return (
     <div {...fieldProps} ref={ref} className="flex">
@@ -25,8 +25,8 @@ export function DateField(props: any) {
 }
 
 function DateSegment({ segment, state }: any) {
-  let ref: any = useRef();
-  let { segmentProps } = useDateSegment(segment, state, ref);
+  const ref: any = useRef();
+  const { segmentProps } = useDateSegment(segment, state, ref);
 
   return (
     <div
@@ -39,7 +39,7 @@ function DateSegment({ segment, state }: any) {
             ? String(segment.maxValue).length + "ch"
             : undefined,
       }}
-      className={`px-0.5 box-content tabular-nums text-right outline-none rounded-sm focus:bg-sky-600 focus:text-white group ${
+      className={`group box-content rounded-sm px-0.5 text-right tabular-nums outline-none focus:bg-sky-600 focus:text-white ${
         !segment.isEditable ? "text-gray-500" : "text-gray-600"
       }`}
     >

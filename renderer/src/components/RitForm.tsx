@@ -21,13 +21,14 @@ function toDateTimeString(date: Date): string {
 }
 
 // TODO: automatically infer correct type based on props (see comment below start of component)
-type AddMutationInput = InferProcedures["rit"]["create"]["input"];
-type CreateMutationInput = InferProcedures["rit"]["updateCompletely"]["input"];
-
+export type createMutationInput = InferProcedures["rit"]["create"]["input"];
+export type updateMutationInput =
+  InferProcedures["rit"]["updateCompletely"]["input"];
+type MutationFn = (args: createMutationInput | updateMutationInput) => void;
 export const RitForm: React.FC<{
   data?: Rit;
-  onSubmit: (args: AddMutationInput | CreateMutationInput) => void;
-}> = ({ data, onSubmit }) => {
+  mutationFn: MutationFn;
+}> = ({ data, mutationFn }) => {
   // I don't like that the data prop magically decides which type of form this generates
   // maybe make it explicit with a prop called "kind" that's an enum?
   const {
@@ -43,35 +44,37 @@ export const RitForm: React.FC<{
   return (
     <form
       className="flex flex-col gap-6 rounded bg-white px-8 pt-6 pb-8"
-      onSubmit={handleSubmit((formData) => {
-        // wait for mutation to complete, while in this function 'isSumitting' is true on 'formState'
-        if (data) {
-          onSubmit({
-            id: data.id,
-            date: formData.startTijd ?? data.date,
-            duration: formData.duur ?? data.duration,
-            distance: formData.afstand ?? data.distance,
-            calories: formData.calorie ?? data.calories,
-            resistance: formData.weerstand ?? data.resistance,
-          });
-        } else {
-          if (
-            formData.startTijd &&
-            formData.duur &&
-            formData.afstand &&
-            formData.calorie &&
-            formData.weerstand
-          ) {
-            onSubmit({
-              date: formData.startTijd,
-              duration: formData.duur,
-              distance: formData.afstand,
-              calories: formData.calorie,
-              resistance: formData.weerstand,
+      onSubmit={() => {
+        return handleSubmit((formData) => {
+          // wait for mutation to complete, while in this function 'isSumitting' is true on 'formState'
+          if (data) {
+            mutationFn({
+              id: data.id,
+              date: formData.startTijd ?? data.date,
+              duration: formData.duur ?? data.duration,
+              distance: formData.afstand ?? data.distance,
+              calories: formData.calorie ?? data.calories,
+              resistance: formData.weerstand ?? data.resistance,
             });
+          } else {
+            if (
+              formData.startTijd &&
+              formData.duur &&
+              formData.afstand &&
+              formData.calorie &&
+              formData.weerstand
+            ) {
+              mutationFn({
+                date: formData.startTijd,
+                duration: formData.duur,
+                distance: formData.afstand,
+                calories: formData.calorie,
+                resistance: formData.weerstand,
+              });
+            }
           }
-        }
-      })}
+        });
+      }}
     >
       <fieldset
         className="grid gap-4 disabled:opacity-60"

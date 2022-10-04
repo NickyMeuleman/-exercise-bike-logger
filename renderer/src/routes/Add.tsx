@@ -21,7 +21,7 @@ const AddPageContent: React.FC = () => {
         />
         <div className="w-full rounded-lg bg-white p-5 lg:w-1/2 lg:rounded-l-none">
           <h1 className="text-center text-4xl text-gray-800">Rit toevoegen</h1>
-          <RitForm data={undefined} onSubmit={mutate} />
+          <RitForm data={undefined} mutationFn={mutate} />
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import { BackspaceIcon, FilterIcon, XIcon } from "@heroicons/react/outline";
+import { CalendarDate } from "@internationalized/date";
 import { Dispatch, SetStateAction, useEffect, useRef } from "react";
 import { DateFilter, GenericFilter } from "../routes/Home";
 import { InferProcedures } from "../utils/trpc";
@@ -66,8 +67,11 @@ const Filters: React.FC<{
               <DateRangePicker
                 key={key}
                 label={label}
-                value={filters.find(({ kind }) => kind == "date")?.val || null}
-                onChange={(newRange: any) => {
+                value={filters.find(({ kind }) => kind == "date")?.val ?? null}
+                onChange={(newRange: {
+                  start: CalendarDate;
+                  end: CalendarDate;
+                }): void => {
                   setFilters((old) => {
                     const withoutDate = old.filter(
                       ({ kind }) => kind !== "date"
@@ -94,7 +98,7 @@ const Filters: React.FC<{
                   // ewwww, type casting
                   const operator = data.get(`${key}-op`) as "lt" | "gt";
                   const num = parseFloat(data.get(`${key}-num`) as string);
-                  if (operator && num) {
+                  if (num) {
                     setFilters((old) => {
                       return [...old, { kind: key, val: { operator, num } }];
                     });
@@ -145,9 +149,9 @@ const Filters: React.FC<{
               >
                 <span className="text-sm text-sky-200">Datum:</span>
                 <span className="text-sm font-semibold text-sky-100">
-                  {val.start.day}-{val.start.month}-{val.start.year}{" "}
-                  <span className="font-normal">tot</span> {val.end.day}-
-                  {val.end.month}-{val.end.year}{" "}
+                  {val.start?.day}-{val.start?.month}-{val.start?.year}{" "}
+                  <span className="font-normal">tot</span> {val.end?.day}-
+                  {val.end?.month}-{val.end?.year}{" "}
                 </span>
                 <XIcon className="inline-block h-3 w-auto text-sky-100" />
               </button>

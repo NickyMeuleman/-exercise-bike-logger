@@ -9,13 +9,15 @@ function minutesToObj(min: number): { hours: number; minutes: number } {
   return { hours, minutes };
 }
 
-const Stats: React.FC<any> = ({ totals }) => {
-  const totalDuration = minutesToObj(totals?.duration || 0);
+const Stats: React.FC<{
+  totals: Record<"distance" | "duration" | "calories", number>;
+}> = ({ totals }) => {
+  const totalDuration = minutesToObj(totals.duration || 0);
   const distance = new Intl.NumberFormat("nl-BE", {
     style: "unit",
     unit: "kilometer",
     unitDisplay: "short",
-  }).formatToParts((totals?.distance || 0) / 1000);
+  }).formatToParts((totals.distance || 0) / 1000);
   const hours = new Intl.NumberFormat("nl-BE", {
     style: "unit",
     unit: "hour",
@@ -28,7 +30,7 @@ const Stats: React.FC<any> = ({ totals }) => {
   }).formatToParts(totalDuration.minutes);
   const calories = new Intl.NumberFormat("nl-BE", {
     style: "decimal",
-  }).formatToParts(totals?.calories || 0);
+  }).formatToParts(totals.calories || 0);
 
   return (
     <div className="grid w-full grid-cols-3 gap-4">
@@ -69,7 +71,7 @@ const Stats: React.FC<any> = ({ totals }) => {
       </StatContainer>
       <StatContainer title="Totale verbranding" Icon={DistanceSVG}>
         <span className="ml-1 text-5xl text-slate-700">
-        {calories
+          {calories
             .filter((item) => item.type !== "unit")
             .map((item) => item.value)
             .join("")}{" "}

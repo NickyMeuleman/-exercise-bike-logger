@@ -5,23 +5,23 @@ import { useOverlay, useModal, DismissButton } from "react-aria";
 import { mergeProps } from "react-aria";
 
 export function Popover(props: any) {
-  let ref: any = useRef();
-  let { popoverRef = ref, isOpen, onClose, children, ...otherProps } = props;
+  const ref: any = useRef();
+  const { popoverRef = ref, isOpen, onClose, children, ...otherProps } = props;
 
   // Handle events that should cause the popup to close,
   // e.g. blur, clicking outside, or pressing the escape key.
-  let { overlayProps } = useOverlay(
+  const { overlayProps } = useOverlay(
     {
       isOpen,
       onClose,
       shouldCloseOnBlur: true,
-      isDismissable: true
+      isDismissable: true,
     },
     popoverRef
   );
 
-  let { modalProps } = useModal();
-  let { dialogProps } = useDialog(otherProps, popoverRef);
+  const { modalProps } = useModal();
+  const { dialogProps } = useDialog(otherProps, popoverRef);
 
   // Add a hidden <DismissButton> component at the end of the popover
   // to allow screen reader users to dismiss the popup easily.
@@ -30,7 +30,7 @@ export function Popover(props: any) {
       <div
         {...mergeProps(overlayProps, modalProps, dialogProps)}
         ref={popoverRef}
-        className="absolute top-full bg-white border border-gray-300 rounded-md shadow-lg mt-2 p-8 z-10"
+        className="absolute top-full z-10 mt-2 rounded-md border border-gray-300 bg-white p-8 shadow-lg"
       >
         {children}
         <DismissButton onDismiss={onClose} />

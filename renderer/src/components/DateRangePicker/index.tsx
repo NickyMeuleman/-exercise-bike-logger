@@ -2,7 +2,7 @@
 // well, "based on", it's a straight copy when I write this comment. Thanks Devon!
 import { useRef } from "react";
 import { useDateRangePickerState } from "@react-stately/datepicker";
-import { useDateRangePicker, OverlayContainer } from "react-aria";
+import { useDateRangePicker } from "react-aria";
 import { FieldButton } from "./Button";
 import { RangeCalendar } from "./RangeCalendar";
 import { DateField } from "./DateField";

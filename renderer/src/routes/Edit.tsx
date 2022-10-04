@@ -1,6 +1,6 @@
 import bikeImg from "../assets/bike-roller.jpg";
 import { trpc } from "../utils/trpc";
-import { RitForm } from "../components/RitForm";
+import { RitForm, updateMutationInput } from "../components/RitForm";
 import { useNavigate, useParams } from "react-router-dom";
 
 const EditPageContent: React.FC<{ id: string }> = ({ id }) => {
@@ -29,7 +29,10 @@ const EditPageContent: React.FC<{ id: string }> = ({ id }) => {
         />
         <div className="w-full rounded-lg bg-white p-5 lg:w-1/2 lg:rounded-l-none">
           <h1 className="text-center text-4xl text-gray-800">Rit aanpassen</h1>
-          <RitForm data={data} onSubmit={updateMutate} />
+          <RitForm
+            data={data}
+            mutationFn={(args) => updateMutate(args as updateMutationInput)}
+          />
           <hr className="mx-auto mb-6 w-4/5 border-t" />
           <button
             className="mx-auto block rounded-full px-4 py-2 text-sm text-red-500 outline-offset-4 outline-red-700 hover:bg-red-700 hover:text-red-200 disabled:cursor-not-allowed disabled:opacity-60"
