@@ -44,8 +44,9 @@ export const RitForm: React.FC<{
   return (
     <form
       className="flex flex-col gap-6 rounded bg-white px-8 pt-6 pb-8"
-      onSubmit={() => {
-        return handleSubmit((formData) => {
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleSubmit((formData) => {
           // wait for mutation to complete, while in this function 'isSumitting' is true on 'formState'
           if (data) {
             mutationFn({
@@ -73,6 +74,8 @@ export const RitForm: React.FC<{
               });
             }
           }
+        })(e).catch(() => {
+          console.error("Could not add rit:", e);
         });
       }}
     >
