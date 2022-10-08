@@ -1,5 +1,7 @@
 import { t } from "../context";
 import { z } from "zod";
+import { dialog } from "electron";
+import fs from "node:fs";
 
 export const ritRouter = t.router({
   getAll: t.procedure.query(({ ctx }) => {
@@ -52,4 +54,70 @@ export const ritRouter = t.router({
     .mutation(({ ctx, input }) => {
       return ctx.prisma.rit.delete({ where: { id: input.id } });
     }),
+  deleteAll: t.procedure.mutation(async ({ ctx }) => {
+    return await ctx.prisma.rit.deleteMany();
+  }),
+  makeCSV: t.procedure.mutation(async ({ ctx }) => {
+    const allRitten = await ctx.prisma.rit.findMany();
+
+    const header = Object.keys(allRitten[0]);
+    const rows = allRitten.map((rit) => Object.values(rit));
+    const csv = [header.join(","), ...rows.map((row) => row.join(","))].join(
+      "\n"
+    );
+
+    const { filePath } = await dialog.showSaveDialog({
+      title: "Choose path to save CSV",
+      filters: [{ name: "Comma seperated values", extensions: ["csv"] }],
+    });
+
+    if (filePath) {
+      fs.writeFileSync(filePath, csv, { encoding: "utf-8" });
+      return allRitten;
+    }
+  }),
+  loadCSV: t.procedure.mutation(async ({ ctx }) => {
+    const { filePaths } = await dialog.showOpenDialog({
+      filters: [{ name: "Comma seperated values", extensions: ["csv"] }],
+    });
+
+    const csv = fs.readFileSync(filePaths[0], { encoding: "utf-8" });
+    const lines = csv.split("\n");
+    const keys = lines.shift()?.split(",");
+
+    const imported = [];
+
+    for (const line of lines) {
+      const obj: Record<string, string> = {};
+      const vals = line.split(",");
+
+      for (const i in keys) {
+        const idx = parseInt(i); // why JavaScript, why
+        const key = keys[idx];
+        const val = vals[idx];
+        obj[key] = val;
+      }
+
+      const rit = z
+        .object({
+          date: z.date(),
+          duration: z.number().int(),
+          distance: z.number().int(),
+          calories: z.number().int(),
+          resistance: z.number().int(),
+        })
+        .parse({
+          date: new Date(obj.date),
+          duration: parseInt(obj.duration),
+          distance: parseInt(obj.distance),
+          calories: parseInt(obj.calories),
+          resistance: parseInt(obj.resistance),
+        });
+
+      const saved = await ctx.prisma.rit.create({ data: rit });
+      imported.push(saved);
+    }
+
+    return imported;
+  }),
 });

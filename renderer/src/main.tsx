@@ -6,6 +6,7 @@ import ErrorPage from "./routes/ErrorPage";
 import Home from "./routes/Home";
 import Add from "./routes/Add";
 import EditPage from "./routes/Edit";
+import { AdminPage } from "./routes/Admin";
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
       { path: "/", element: <Home /> },
       { path: "add", element: <Add /> },
       { path: "edit/:id", element: <EditPage /> },
+      { path: "admin", element: <AdminPage /> },
     ],
   },
 ]);
