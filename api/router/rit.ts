@@ -76,48 +76,66 @@ export const ritRouter = t.router({
       return allRitten;
     }
   }),
-  loadCSV: t.procedure.mutation(async ({ ctx }) => {
-    const { filePaths } = await dialog.showOpenDialog({
-      filters: [{ name: "Comma seperated values", extensions: ["csv"] }],
-    });
+  loadCSV: t.procedure
+    .input(
+      z.object({
+        type: z.enum(["datum-uur-gecombineerd", "datum-uur-gesplitst"]),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { filePaths } = await dialog.showOpenDialog({
+        filters: [{ name: "Comma seperated values", extensions: ["csv"] }],
+      });
 
-    const csv = fs.readFileSync(filePaths[0], { encoding: "utf-8" });
-    const lines = csv.split("\n");
-    const keys = lines.shift()?.split(",");
+      const csv = fs.readFileSync(filePaths[0], { encoding: "utf-8" });
+      const lines = csv.split(/\r?\n/);
+      const keys = lines.shift()?.split(",");
+      console.log(lines);
 
-    const imported = [];
+      const imported = [];
 
-    for (const line of lines) {
-      const obj: Record<string, string> = {};
-      const vals = line.split(",");
+      for (const line of lines) {
+        const obj: Record<string, string> = {};
+        const vals = line.split(",");
 
-      for (const i in keys) {
-        const idx = parseInt(i); // why JavaScript, why
-        const key = keys[idx];
-        const val = vals[idx];
-        obj[key] = val;
-      }
+        for (const i in keys) {
+          const idx = parseInt(i); // why JavaScript, why
+          const key = keys[idx];
+          const val = vals[idx];
+          obj[key] = val;
+        }
 
-      const rit = z
-        .object({
+        const ritValidator = z.object({
           date: z.date(),
           duration: z.number().int(),
           distance: z.number().int(),
           calories: z.number().int(),
           resistance: z.number().int(),
-        })
-        .parse({
-          date: new Date(obj.date),
-          duration: parseInt(obj.duration),
-          distance: parseInt(obj.distance),
-          calories: parseInt(obj.calories),
-          resistance: parseInt(obj.resistance),
         });
 
-      const saved = await ctx.prisma.rit.create({ data: rit });
-      imported.push(saved);
-    }
+        let rit = null;
+        if (input.type === "datum-uur-gecombineerd") {
+          rit = ritValidator.parse({
+            date: new Date(obj.date),
+            duration: parseInt(obj.duration),
+            distance: parseInt(obj.distance),
+            calories: parseInt(obj.calories),
+            resistance: parseInt(obj.resistance),
+          });
+        } else {
+          rit = ritValidator.parse({
+            date: new Date(`${obj.datum}T${obj.uur}`),
+            duration: parseInt(obj.tijd),
+            distance: Math.floor(parseFloat(obj.distance) * 1000),
+            calories: parseInt(obj.calories),
+            resistance: parseInt(obj.weerstand),
+          });
+        }
 
-    return imported;
-  }),
+        const saved = await ctx.prisma.rit.create({ data: rit });
+        imported.push(saved);
+      }
+
+      return imported;
+    }),
 });

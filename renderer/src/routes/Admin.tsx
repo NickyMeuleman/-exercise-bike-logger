@@ -100,16 +100,30 @@ export const AdminPage: React.FC = () => {
             Ritten importeren uit een CSV bestand met of zonder <code>id</code>
           </p>
         </div>
-        <button
-          className={`rounded-full border-2
+        <div className="flex gap-2">
+          <button
+            className={`rounded-full border-2
                 border-sky-700 bg-transparent py-2
-             px-4 text-base leading-normal text-sky-700 outline-none hover:bg-sky-700 hover:text-sky-100 focus:ring-1 focus:ring-sky-700 focus:ring-offset-2 active:ring-0 active:ring-offset-0`}
-          onClick={() => {
-            loadCSV();
-          }}
-        >
-          <span className="font-semibold">Importeren</span>
-        </button>
+                px-4 text-base leading-normal text-sky-700 outline-none hover:bg-sky-700 hover:text-sky-100 focus:ring-1 focus:ring-sky-700 focus:ring-offset-2 active:ring-0 active:ring-offset-0`}
+            onClick={() => {
+              loadCSV({ type: "datum-uur-gecombineerd" });
+            }}
+          >
+            <span className="font-semibold">
+              Met gecombineerd uur importeren
+            </span>
+          </button>
+          <button
+            className={`rounded-full border-2
+          border-sky-700 bg-transparent py-2
+          px-4 text-base leading-normal text-sky-700 outline-none hover:bg-sky-700 hover:text-sky-100 focus:ring-1 focus:ring-sky-700 focus:ring-offset-2 active:ring-0 active:ring-offset-0`}
+            onClick={() => {
+              loadCSV({ type: "datum-uur-gesplitst" });
+            }}
+          >
+            <span className="font-semibold">Met gesplitst uur importeren</span>
+          </button>
+        </div>
       </div>
       <div className="flex justify-between">
         <div>
