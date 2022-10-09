@@ -12,12 +12,18 @@ import type { Rit } from "@prisma/client";
 import { InferProcedures } from "../utils/trpc";
 
 // https://webreflection.medium.com/using-the-input-datetime-local-9503e7efdce
+function toDatetimeLocal(date: Date) {
+  function ten(i: number) {
+    return i < 10 ? `0${i}` : `${i}`;
+  }
 
-function toDateTimeString(date: Date): string {
-  const isoString = date.toISOString();
-  // the datetime-local can't handle the Z at the end, remove it
-  // also remove :ss.SSSS
-  return isoString.substring(0, isoString.length - 8);
+  const YYYY = date.getFullYear();
+  const MM = ten(date.getMonth() + 1);
+  const DD = ten(date.getDate());
+  const HH = ten(date.getHours());
+  const II = ten(date.getMinutes());
+
+  return `${YYYY}-${MM}-${DD}T${HH}:${II}`;
 }
 
 // TODO: automatically infer correct type based on props (see comment below start of component)
@@ -104,15 +110,13 @@ export const RitForm: React.FC<{
                   {...field}
                   value={
                     field.value
-                      ? toDateTimeString(field.value)
+                      ? toDatetimeLocal(field.value)
                       : data
-                      ? toDateTimeString(data.date)
+                      ? toDatetimeLocal(data.date)
                       : ""
                   }
                   onChange={(e) => {
-                    // make sure to create a date using valueAsNumber and NOT value
-                    // or JS will try to help and do weird timezone summertime shenanigans
-                    field.onChange(new Date(e.target.valueAsNumber));
+                    field.onChange(new Date(e.target.value));
                   }}
                 />
                 {fieldState.error && (
