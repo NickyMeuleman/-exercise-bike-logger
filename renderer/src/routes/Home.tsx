@@ -28,7 +28,7 @@ export interface GenericFilter {
 }
 
 const Home = () => {
-  const [sortKey, setSortKey] = useState<SortKeys>("distance");
+  const [sortKey, setSortKey] = useState<SortKeys>("date");
   const [sortOrder, setSortOrder] = useState<SortOrder>("ascn");
   const [filters, setFilters] = useState<(DateFilter | GenericFilter)[]>([
     {
