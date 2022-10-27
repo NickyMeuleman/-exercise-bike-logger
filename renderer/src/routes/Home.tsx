@@ -5,6 +5,7 @@ import {
   getLocalTimeZone,
   parseAbsoluteToLocal,
   CalendarDate,
+  toCalendarDate,
 } from "@internationalized/date";
 import { InferProcedures, trpc } from "../utils/trpc";
 import { useState } from "react";
@@ -45,16 +46,14 @@ const Home = () => {
       for (const filter of filters) {
         filteredData = filteredData.filter((rit) => {
           if (filter.kind == "date") {
-            // TODO: include last day of month
-
-            const date = parseAbsoluteToLocal(rit.date.toISOString());
-            const startCompare = date.compare(
-              filter.val.start ?? startOfMonth(today(getLocalTimeZone()))
-            );
+            const dateWithTime = parseAbsoluteToLocal(rit.date.toISOString());
+            // convert to CalendarDate or else a DateTime at the end of the month will compare as after a CalendarDate at the end of the month
+            const date = toCalendarDate(dateWithTime);
+            const monthStart = startOfMonth(today(getLocalTimeZone()));
+            const monthEnd = endOfMonth(today(getLocalTimeZone()));
+            const startCompare = date.compare(filter.val.start ?? monthStart);
             const beforeStart = startCompare < 0;
-            const endCompare = date.compare(
-              filter.val.end ?? endOfMonth(today(getLocalTimeZone()))
-            );
+            const endCompare = date.compare(filter.val.end ?? monthEnd);
             const afterEnd = endCompare > 0;
 
             return !beforeStart && !afterEnd;
