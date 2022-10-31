@@ -8,6 +8,11 @@ if (process.env.VITE_APP_VERSION === undefined) {
 }
 
 const config: builder.Configuration = {
+  appId: "com.electron.hometrainer-tracker",
+  productName: "Hometrainer Tracker",
+  win: {
+    icon: "buildResources/icon.png",
+  },
   directories: {
     output: "dist",
     buildResources: "buildResources",
@@ -26,7 +31,7 @@ const config: builder.Configuration = {
 builder
   .build({
     config,
-    dir: true,
+    dir: false,
   })
   .then((result) => {
     console.log(JSON.stringify(result));
