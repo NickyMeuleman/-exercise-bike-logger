@@ -1,6 +1,7 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, screen } from "electron";
 import { join } from "path";
 import { URL } from "url";
+
 /**
  * URL for main window.
  * Vite dev server for development.
@@ -12,7 +13,11 @@ export const pageUrl =
     : new URL("../renderer/dist/index.html", "file://" + __dirname).toString();
 
 async function createWindow() {
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+
   const browserWindow = new BrowserWindow({
+    width: width / 1.25,
+    height: height / 1.25,
     show: false, // Use the 'ready-to-show' event to show the instantiated BrowserWindow.
     webPreferences: {
       allowRunningInsecureContent: false, // https://www.electronjs.org/docs/latest/tutorial/security#8-do-not-enable-allowrunninginsecurecontent
