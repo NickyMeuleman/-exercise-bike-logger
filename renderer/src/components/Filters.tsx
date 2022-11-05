@@ -97,7 +97,13 @@ const Filters: React.FC<{
                   const data = new FormData(e.target as HTMLFormElement);
                   // ewwww, type casting
                   const operator = data.get(`${key}-op`) as "lt" | "gt";
-                  const num = parseFloat(data.get(`${key}-num`) as string);
+                  let num = parseFloat(data.get(`${key}-num`) as string);
+
+                  // distance given in km but stored in m. convert
+                  if (key == "distance") {
+                    num *= 1000;
+                  }
+
                   if (num) {
                     setFilters((old) => {
                       return [...old, { kind: key, val: { operator, num } }];
@@ -116,15 +122,31 @@ const Filters: React.FC<{
                   <option value={"gt"}>Groter dan</option>
                   <option value={"lt"}>Kleiner dan</option>
                 </select>
-                <input
-                  name={`${key}-num`}
-                  type="number"
-                  className="relative -ml-px flex w-16 border border-gray-300 bg-white p-1 shadow-none transition-colors focus:shadow-none group-focus-within:border-sky-600 group-hover:border-gray-400 group-focus-within:group-hover:border-sky-600"
-                  style={{
-                    // I wish I didn't have to override like this, because adding a class of "shadow-none" didn't work
-                    boxShadow: "none",
-                  }}
-                />
+                {key === "distance" ? (
+                  <input
+                    name={`${key}-num`}
+                    type="number"
+                    min={0}
+                    step={0.1}
+                    className="relative -ml-px flex w-16 border border-gray-300 bg-white p-1 shadow-none transition-colors focus:shadow-none group-focus-within:border-sky-600 group-hover:border-gray-400 group-focus-within:group-hover:border-sky-600"
+                    style={{
+                      // I wish I didn't have to override like this, because adding a class of "shadow-none" didn't work
+                      boxShadow: "none",
+                    }}
+                  />
+                ) : (
+                  <input
+                    name={`${key}-num`}
+                    type="number"
+                    step={1}
+                    min={0}
+                    className="relative -ml-px flex w-16 border border-gray-300 bg-white p-1 shadow-none transition-colors focus:shadow-none group-focus-within:border-sky-600 group-hover:border-gray-400 group-focus-within:group-hover:border-sky-600"
+                    style={{
+                      // I wish I didn't have to override like this, because adding a class of "shadow-none" didn't work
+                      boxShadow: "none",
+                    }}
+                  />
+                )}
                 <button
                   type="submit"
                   className="-ml-px rounded-r-md border border-gray-300 bg-gray-50 px-2 text-sm outline-none transition-colors active:border-gray-400 active:bg-gray-200 group-focus-within:border-sky-600 group-hover:border-gray-400 group-focus-within:group-hover:border-sky-600"

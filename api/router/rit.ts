@@ -90,7 +90,6 @@ export const ritRouter = t.router({
       const csv = fs.readFileSync(filePaths[0], { encoding: "utf-8" });
       const lines = csv.split(/\r?\n/);
       const keys = lines.shift()?.split(",");
-      console.log(lines);
 
       const imported = [];
 

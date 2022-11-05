@@ -39,6 +39,7 @@ const Home = () => {
       },
     },
   ]);
+
   const ritten = trpc.rit.getAll.useQuery(undefined, {
     select: (data) => {
       let filteredData = data;
